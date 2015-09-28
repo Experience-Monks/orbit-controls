@@ -20,18 +20,21 @@
   },
   "devDependencies": {
     "2d-context": "^1.3.0",
+    "browserify": "^11.2.0",
     "budo": "^5.1.0",
     "canvas-loop": "^1.0.5",
     "draw-triangles-2d": "^1.0.0",
     "garnish": "^3.2.1",
     "perspective-camera": "^2.0.1",
     "primitive-torus": "^1.0.4",
-    "three": "^0.72.0"
+    "three": "^0.72.0",
+    "uglify-js": "^2.4.24"
   },
   "scripts": {
     "test": "node test.js",
     "start": "budo demo/canvas.js:bundle.js --live | garnish",
-    "three": "budo demo/three.js:bundle.js --live | garnish"
+    "three": "budo demo/three.js:bundle.js --live | garnish",
+    "build": "browserify demo/canvas.js | uglifyjs -cm > bundle.js"
   },
   "keywords": [
     "orbit",
