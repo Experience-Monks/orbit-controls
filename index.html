@@ -9,7 +9,12 @@
   body {
     font-family: 'Noto Sans', Helvetica, sans-serif;
     font-size: 16px;
+    overflow: hidden;
     -webkit-font-smoothing: antialiased;
+  }
+  canvas {
+    display: block;
+    position: fixed;
   }
   .link, .link:active, .info:visited {
     text-decoration: none;
@@ -39,12 +44,12 @@
   .link:hover::after {
     height: 4px;
     bottom: -4px;
-  }
+  }*/
   </style>
 </head>
 <body>
   <canvas class="canvas"></canvas>
-  <a class="link" href="https://github.com/Jam3/orbit-controls">Jam3/orbit-controls</a>
+  <a class="link" target="_blank" href="https://github.com/Jam3/orbit-controls">Jam3/orbit-controls</a>
   <script src="bundle.js"></script>
 </body>
 </html>

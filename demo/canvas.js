@@ -24,7 +24,7 @@ var mesh = require('primitive-torus')({
 // a convenience utility for basic 3D camera math
 var camera = require('perspective-camera')({
   fov: 50 * Math.PI / 180,
-  position: [0, 0, 5],
+  position: [0, 0, 1],
   near: 0.01,
   far: 100,
   
@@ -32,14 +32,24 @@ var camera = require('perspective-camera')({
 
 // set up our input controls
 var controls = require('../')({
-  element: canvas,
+  // element: canvas,
   distanceBounds: [2, 100],
-  distance: camera.position[2],
+  distance: 6,
   rotationSpeed: 1
 })
 
+preventScroll()
+
 // create a full-screen render loop for our canvas
-var app = createApp(canvas).start()
+var app = createApp(canvas, {
+  parent: function () {
+    var element = document.documentElement
+    return [ element.clientWidth, element.clientHeight ]
+  }
+}).start()
+
+// alert(canvas.width + ',' + canvas.height)
+
 app.on('tick', function () {
   var width = app.shape[0]
   var height = app.shape[1]
@@ -84,4 +94,10 @@ function drawMesh (ctx, camera, mesh) {
   ctx.strokeStyle = colors[1]
   drawTriangles(ctx, positions, mesh.cells, mid)
   ctx.stroke()
+}
+
+function preventScroll () {
+  canvas.addEventListener('touchstart', function (ev) {
+    ev.preventDefault()
+  })
 }

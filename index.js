@@ -49,7 +49,8 @@ function createOrbitControls (opt) {
   }
 
   var touch = createTouch(window, {
-    filtered: true, target: controls.element
+    filtered: true, target: controls.element,
+    preventSimulated: false
   })
   setupEvents()
 
@@ -57,7 +58,6 @@ function createOrbitControls (opt) {
 
   function setupEvents () {
     touch.on('start', function (ev, pos) {
-      ev.preventDefault()
       dragging = true
       mouseStart = pos
     })
@@ -81,17 +81,15 @@ function createOrbitControls (opt) {
   }
 
   function updateMouseMove (dx, dy) {
-    var width, height
     var element = controls.element || window
     if (element === document ||
         element === window ||
         element === document.body) {
-      width = window.innerWidth
-      height = window.innerHeight
-    } else {
-      width = element.clientWidth
-      height = element.clientHeight
+      element = document.documentElement
     }
+
+    var width = element.clientWidth
+    var height = element.clientHeight
 
     var PI2 = Math.PI * 2
     inputDelta[0] -= PI2 * dx / width * controls.rotateSpeed
