@@ -17,38 +17,35 @@ var ctx = require('2d-context')({ alpha: false, canvas: canvas })
 
 // get a 3D mesh (any simplicial complex will work)
 var mesh = require('primitive-torus')({
-  minorSegments: 3,
-  majorSegments: 4
+  minorSegments: 5,
+  majorSegments: 6
 })
 
 // a convenience utility for basic 3D camera math
 var camera = require('perspective-camera')({
   fov: 50 * Math.PI / 180,
-  position: [0, 0, 1],
-  near: 0.01,
+  position: [0, 2, 0],
+  near: 0.00001,
   far: 100,
-  
 })
 
 // set up our input controls
 var controls = require('../')({
-  // element: canvas,
+  element: canvas,
+  // phiBounds: [0.001, Infinity],
+  thetaBounds: [-1.5, 1.5],
   distanceBounds: [2, 100],
   distance: 6,
-  rotationSpeed: 1
+  rotationSpeed: 1,
+  pinchSpeed: 0.025
 })
 
 preventScroll()
 
 // create a full-screen render loop for our canvas
 var app = createApp(canvas, {
-  parent: function () {
-    var element = document.documentElement
-    return [ element.clientWidth, element.clientHeight ]
-  }
+  scale: window.devicePixelRatio
 }).start()
-
-// alert(canvas.width + ',' + canvas.height)
 
 app.on('tick', function () {
   var width = app.shape[0]

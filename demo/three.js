@@ -8,7 +8,8 @@ var createApp = require('canvas-loop')
 var THREE = require('three')
 
 var controls = require('../')({
-  distance: 5
+  distance: 5,
+  // thetaBounds: [-0.5, 0.5],
 })
 
 var canvas = document.querySelector('.canvas')
@@ -17,10 +18,10 @@ var renderer = new THREE.WebGLRenderer({ canvas: canvas })
 var target = new THREE.Vector3()
 var scene = new THREE.Scene()
 var camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100)
-camera.position.set(0, 0, 5)
+camera.position.set(0, 1, 0)
 camera.lookAt(target)
 
-var geo = new THREE.BoxGeometry(1, 1, 1)
+var geo = new THREE.TorusGeometry(1, 0.2)
 var mat = new THREE.MeshBasicMaterial({ wireframe: true, color: 0xffffff })
 var box = new THREE.Mesh(geo, mat)
 scene.add(box)
