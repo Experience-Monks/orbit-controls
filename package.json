@@ -17,8 +17,7 @@
     "mouse-event-offset": "^3.0.2",
     "mouse-wheel": "^1.0.2",
     "quat-from-unit-vec3": "^1.0.0",
-    "touch-pinch": "^1.0.0",
-    "touches": "^1.2.0"
+    "touch-pinch": "^1.0.0"
   },
   "devDependencies": {
     "2d-context": "^1.3.0",
@@ -29,7 +28,6 @@
     "garnish": "^3.2.1",
     "icosphere": "^1.0.0",
     "perspective-camera": "^2.0.1",
-    "primitive-torus": "^1.0.4",
     "three": "^0.72.0",
     "uglify-js": "^2.4.24"
   },

@@ -29,13 +29,8 @@ var camera = require('perspective-camera')({
 // set up our input controls
 var controls = require('../')({
   element: canvas,
-  // phiBounds: [0.001, Infinity],
-  // thetaBounds: [-1.5, 1.5],
   distanceBounds: [2, 100],
-  distance: 6,
-  pinch: false,
-  rotationSpeed: 1,
-  // pinchSpeed: 0.025
+  distance: 6
 })
 
 preventScroll()

@@ -9,7 +9,6 @@ var THREE = require('three')
 
 var controls = require('../')({
   distance: 5,
-  // thetaBounds: [-0.5, 0.5],
 })
 
 var canvas = document.querySelector('.canvas')
@@ -23,8 +22,7 @@ camera.lookAt(target)
 
 var geo = new THREE.TorusGeometry(1, 0.2)
 var mat = new THREE.MeshBasicMaterial({
-  color: 0xffffff,
-  // map: THREE.ImageUtils.loadTexture('img/textire.jpg')
+  color: 0xffffff
 })
 var box = new THREE.Mesh(geo, mat)
 scene.add(box)

@@ -24,10 +24,10 @@ function createOrbitControls (opt) {
 
   var inputDelta = [0, 0, 0] // x, y, zoom
   var offset = [0, 0, 0]
-  
+
   var upQuat = [0, 0, 0, 1]
   var upQuatInverse = upQuat.slice()
-  
+
   var controls = {
     update: update,
 
@@ -39,16 +39,16 @@ function createOrbitControls (opt) {
     rotateSpeed: defined(opt.rotateSpeed, 0.5),
     zoomSpeed: defined(opt.zoomSpeed, 0.01),
     pinchSpeed: defined(opt.pinchSpeed, 0.01),
-    
+
     pinch: opt.pinching !== false,
     zoom: opt.zoom !== false,
     rotate: opt.rotate !== false,
-    
+
     phiBounds: opt.phiBounds || [0, Math.PI],
     thetaBounds: opt.thetaBounds || [-Infinity, Infinity],
     distanceBounds: opt.distanceBounds || [1, Infinity]
   }
-  
+
   inputEvents({
     parent: opt.parent || window,
     element: opt.element,
@@ -58,21 +58,21 @@ function createOrbitControls (opt) {
   })
 
   return controls
-  
+
   function inputRotate (dx, dy) {
     var PI2 = Math.PI * 2
     inputDelta[0] -= PI2 * dx * controls.rotateSpeed
     inputDelta[1] -= PI2 * dy * controls.rotateSpeed
   }
-  
+
   function inputZoom (delta) {
     inputDelta[2] += delta * controls.zoomSpeed
   }
-  
+
   function inputPinch (delta) {
     inputDelta[2] -= delta * controls.pinchSpeed
   }
-  
+
   function update (position, direction, up) {
     var cameraUp = up || Y_UP
     quatFromVec3(upQuat, cameraUp, Y_UP)
@@ -82,17 +82,17 @@ function createOrbitControls (opt) {
 
     glVec3.subtract(offset, position, controls.target)
     glVec3.transformQuat(offset, offset, upQuat)
-    
+
     var theta = Math.atan2(offset[0], offset[2])
     var phi = Math.atan2(Math.sqrt(offset[0] * offset[0] + offset[2] * offset[2]), offset[1])
-    
+
     theta += inputDelta[0]
     phi += inputDelta[1]
-    
+
     theta = clamp(theta, controls.thetaBounds[0], controls.thetaBounds[1])
     phi = clamp(phi, controls.phiBounds[0], controls.phiBounds[1])
     phi = clamp(phi, EPSILON, Math.PI - EPSILON)
-    
+
     distance += inputDelta[2]
     distance = clamp(distance, controls.distanceBounds[0], controls.distanceBounds[1])
 
@@ -100,7 +100,7 @@ function createOrbitControls (opt) {
     offset[0] = radius * Math.sin(phi) * Math.sin(theta)
     offset[1] = radius * Math.cos(phi)
     offset[2] = radius * Math.sin(phi) * Math.cos(theta)
-    
+
     controls.phi = phi
     controls.theta = theta
     controls.distance = distance
@@ -114,7 +114,6 @@ function createOrbitControls (opt) {
       inputDelta[i] *= 1 - damp
     }
   }
-  
 }
 
 function camLookAt (direction, up, position, target) {
