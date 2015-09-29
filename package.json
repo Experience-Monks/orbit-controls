@@ -14,6 +14,7 @@
     "defined": "^1.0.0",
     "gl-quat": "^1.0.0",
     "gl-vec3": "^1.0.3",
+    "mouse-event-offset": "^3.0.2",
     "mouse-wheel": "^1.0.2",
     "quat-from-unit-vec3": "^1.0.0",
     "touches": "^1.2.0"
