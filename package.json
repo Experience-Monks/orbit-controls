@@ -17,6 +17,7 @@
     "mouse-event-offset": "^3.0.2",
     "mouse-wheel": "^1.0.2",
     "quat-from-unit-vec3": "^1.0.0",
+    "touch-pinch": "^1.0.0",
     "touches": "^1.2.0"
   },
   "devDependencies": {
@@ -26,6 +27,7 @@
     "canvas-loop": "^1.0.5",
     "draw-triangles-2d": "^1.0.0",
     "garnish": "^3.2.1",
+    "icosphere": "^1.0.0",
     "perspective-camera": "^2.0.1",
     "primitive-torus": "^1.0.4",
     "three": "^0.72.0",

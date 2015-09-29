@@ -16,15 +16,12 @@ var canvas = document.querySelector('.canvas')
 var ctx = require('2d-context')({ alpha: false, canvas: canvas })
 
 // get a 3D mesh (any simplicial complex will work)
-var mesh = require('primitive-torus')({
-  minorSegments: 5,
-  majorSegments: 6
-})
+var mesh = require('icosphere')(1)
 
 // a convenience utility for basic 3D camera math
 var camera = require('perspective-camera')({
   fov: 50 * Math.PI / 180,
-  position: [0, 2, 0],
+  position: [0, 0, 1],
   near: 0.00001,
   far: 100,
 })
@@ -33,11 +30,12 @@ var camera = require('perspective-camera')({
 var controls = require('../')({
   element: canvas,
   // phiBounds: [0.001, Infinity],
-  thetaBounds: [-1.5, 1.5],
+  // thetaBounds: [-1.5, 1.5],
   distanceBounds: [2, 100],
   distance: 6,
+  pinch: false,
   rotationSpeed: 1,
-  pinchSpeed: 0.025
+  // pinchSpeed: 0.025
 })
 
 preventScroll()

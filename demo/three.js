@@ -22,7 +22,10 @@ camera.position.set(0, 1, 0)
 camera.lookAt(target)
 
 var geo = new THREE.TorusGeometry(1, 0.2)
-var mat = new THREE.MeshBasicMaterial({ wireframe: true, color: 0xffffff })
+var mat = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  // map: THREE.ImageUtils.loadTexture('img/textire.jpg')
+})
 var box = new THREE.Mesh(geo, mat)
 scene.add(box)
 

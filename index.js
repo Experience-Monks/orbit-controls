@@ -1,12 +1,9 @@
-var createPinch = require('touch-pinch')
-var createTouch = require('touches')
 var defined = require('defined')
 var clamp = require('clamp')
 
 var inputEvents = require('./lib/input')
 var quatFromVec3 = require('quat-from-unit-vec3')
 var quatInvert = require('gl-quat/invert')
-var noop = function(){}
 
 var glVec3 = {
   length: require('gl-vec3/length'),
@@ -19,9 +16,7 @@ var glVec3 = {
 }
 
 var Y_UP = [0, 1, 0]
-var EPSILON = 1e-4
-var tmpVec3 = [0, 0, 0]
-var tmpVec2 = [0, 0]
+var EPSILON = 1e-10
 
 module.exports = createOrbitControls
 function createOrbitControls (opt) {
@@ -118,24 +113,12 @@ function createOrbitControls (opt) {
     for (var i = 0; i < inputDelta.length; i++) {
       inputDelta[i] *= 1 - damp
     }
-    
   }
   
-  function normalizeAngle (angle) {
-      var newAngle = angle
-      while (newAngle <= -Math.PI) newAngle += Math.PI*2
-      while (newAngle > Math.PI) newAngle -= Math.PI*2
-      return newAngle
-  }
 }
 
 function camLookAt (direction, up, position, target) {
   glVec3.copy(direction, target)
-
   glVec3.subtract(direction, direction, position)
   glVec3.normalize(direction, direction)
-
-  // right vector
-  // glVec3.cross(tmpVec3, direction, up)
-  // glVec3.normalize(tmpVec3, tmpVec3)
 }
