@@ -1,7 +1,7 @@
+var createPinch = require('touch-pinch')
 var createTouch = require('touches')
 var defined = require('defined')
 var clamp = require('clamp')
-var wheel = require('mouse-wheel')
 
 var quatFromVec3 = require('quat-from-unit-vec3')
 var quatInvert = require('gl-quat/invert')
@@ -18,6 +18,7 @@ var glVec3 = {
 var Y_UP = [0, 1, 0]
 var EPSILON = 1e-10
 var tmpVec3 = [0, 0, 0]
+var tmpVec2 = [0, 0]
 
 module.exports = createOrbitControls
 function createOrbitControls (opt) {
@@ -26,11 +27,13 @@ function createOrbitControls (opt) {
   var inputDelta = [0, 0, 0] // x, y, zoom
   var offset = [0, 0, 0]
   var mouseStart = [0, 0]
+  var lastPinch = 0
   var dragging = false
+  var pinch, touch
 
   var upQuat = [0, 0, 0, 1]
   var upQuatInverse = upQuat.slice()
-
+  
   var controls = {
     update: update,
 
@@ -42,60 +45,101 @@ function createOrbitControls (opt) {
     damping: defined(opt.damping, 0.25),
     rotateSpeed: defined(opt.rotateSpeed, 0.5),
     zoomSpeed: defined(opt.zoomSpeed, 0.01),
-
+    pinchSpeed: defined(opt.pinchSpeed, 0.01),
+    
+    pinch: opt.pinching !== false,
+    zoom: opt.zoom !== false,
+    rotate: opt.rotate !== false,
+    
     phiBounds: opt.phiBounds || [0, Math.PI],
     thetaBounds: opt.thetaBounds || [-Infinity, Infinity],
     distanceBounds: opt.distanceBounds || [1, Infinity]
   }
 
-  var touch = createTouch(window, {
-    filtered: true, target: controls.element,
-    preventSimulated: false
-  })
   setupEvents()
 
   return controls
 
   function setupEvents () {
+    pinch = createPinch(controls.element)
+    pinch.on('start', function (distance) {
+      lastPinch = distance
+    })
+
+    pinch.on('move', function (current) {
+      if (controls.pinch !== false) {
+        inputDelta[2] -= (current - lastPinch) * controls.pinchSpeed
+      }
+      lastPinch = current
+    })
+    
+    // when pinch is lifted, set the currently filtered touch
+    // to the new finger
+    pinch.on('lift', function (touch, remaining) {
+      if (touch && remaining) {
+        touch.filteredTouch = remaining
+        console.log("refilter", remaining.identifier)
+      }
+    })
+    
+    touch = createTouch(window, {
+      filtered: true,
+      target: controls.element,
+      preventSimulated: false
+    })
+    
     touch.on('start', function (ev, pos) {
       dragging = true
       mouseStart = pos
     })
 
     touch.on('end', function () {
+      console.log("end")
       dragging = false
     })
 
     touch.on('move', function (ev, end) {
       if (!dragging) return
+      if (pinch.pinching) {
+        mouseStart = end
+        return
+      }
+      
       var dx = end[0] - mouseStart[0]
       var dy = end[1] - mouseStart[1]
-      updateMouseMove(dx, dy)
+      if (controls.rotate !== false) {
+        updateMouseMove(dx, dy)
+      }
       mouseStart[0] = end[0]
       mouseStart[1] = end[1]
     })
 
     wheel(function (dx, dy) {
-      inputDelta[2] += dy * controls.zoomSpeed
+      if (controls.zoom !== false) {
+        inputDelta[2] += dy * controls.zoomSpeed
+      }
     }, true)
   }
-
-  function updateMouseMove (dx, dy) {
+  
+  function getClientSize () {
     var element = controls.element || window
     if (element === document ||
         element === window ||
         element === document.body) {
       element = document.documentElement
     }
-
-    var width = element.clientWidth
-    var height = element.clientHeight
-
-    var PI2 = Math.PI * 2
-    inputDelta[0] -= PI2 * dx / width * controls.rotateSpeed
-    inputDelta[1] -= PI2 * dy / height * controls.rotateSpeed
+    tmpVec2[0] = element.clientWidth
+    tmpVec2[1] = element.clientHeight
+    return tmpVec2
   }
 
+  function updateMouseMove (dx, dy) {
+    var rect = getClientSize()
+    var PI2 = Math.PI * 2
+    inputDelta[0] -= PI2 * dx / rect[0] * controls.rotateSpeed
+    inputDelta[1] -= PI2 * dy / rect[1] * controls.rotateSpeed
+  }
+  
   function update (position, direction, up) {
     var cameraUp = up || Y_UP
     quatFromVec3(upQuat, cameraUp, Y_UP)
