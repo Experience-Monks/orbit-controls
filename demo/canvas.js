@@ -33,7 +33,7 @@ var camera = require('perspective-camera')({
 var controls = require('../')({
   element: canvas,
   // phiBounds: [0.001, Infinity],
-  thetaBounds: [-0.5, 0.5],
+  thetaBounds: [-1.5, 1.5],
   distanceBounds: [2, 100],
   distance: 6,
   rotationSpeed: 1,
