@@ -13,7 +13,12 @@ var colors = [
 
 // get a Canvas2D context
 var canvas = document.querySelector('.canvas')
-var ctx = require('2d-context')({ alpha: false, canvas: canvas })
+var ctx = canvas.getContext('2d', { alpha: false })
+
+// disable right-click
+canvas.oncontextmenu = function () {
+  return false
+}
 
 // get a 3D mesh (any simplicial complex will work)
 var mesh = require('icosphere')(1)
