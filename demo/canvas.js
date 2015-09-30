@@ -47,7 +47,7 @@ var camera = require('perspective-camera')({
 // set up our input controls
 var controls = require('../')({
   element: canvas,
-  distanceBounds: [1.5, 100],
+  distanceBounds: [1, 100],
   distance: 2
 })
 
