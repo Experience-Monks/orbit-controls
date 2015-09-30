@@ -36,9 +36,9 @@ function createOrbitControls (opt) {
     theta: opt.theta || 0,
     distance: defined(opt.distance, 1),
     damping: defined(opt.damping, 0.25),
-    rotateSpeed: defined(opt.rotateSpeed, 0.5),
-    zoomSpeed: defined(opt.zoomSpeed, 0.01),
-    pinchSpeed: defined(opt.pinchSpeed, 0.01),
+    rotateSpeed: defined(opt.rotateSpeed, 0.28),
+    zoomSpeed: defined(opt.zoomSpeed, 0.0075),
+    pinchSpeed: defined(opt.pinchSpeed, 0.0075),
 
     pinch: opt.pinching !== false,
     zoom: opt.zoom !== false,
