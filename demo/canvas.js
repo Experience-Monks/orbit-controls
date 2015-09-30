@@ -5,10 +5,14 @@
 
 var drawTriangles = require('draw-triangles-2d')
 var createApp = require('canvas-loop')
+var createTorus = require('primitive-torus')
+var createConfetti = require('./confetti-mesh')
+var clamp = require('clamp')
 
 var colors = [
   'hsl(80, 50%, 50%)',
-  'hsl(180, 50%, 50%)'
+  'hsl(380, 50%, 50%)',
+  'hsl(180, 50%, 50%)',
 ]
 
 // get a Canvas2D context
@@ -20,8 +24,17 @@ canvas.oncontextmenu = function () {
   return false
 }
 
-// get a 3D mesh (any simplicial complex will work)
-var mesh = require('icosphere')(1)
+// set up our 3D scene (a list of 3D meshes)
+var meshes = [
+  createTorus({
+    majorRadius: 0.3,
+    minorRadius: 0.05,
+    majorSegments: 4,
+    minorSegments: 3
+  }),
+  createConfetti(25, 0.5),
+  createConfetti(15, 0.75)
+]
 
 // a convenience utility for basic 3D camera math
 var camera = require('perspective-camera')({
@@ -34,8 +47,8 @@ var camera = require('perspective-camera')({
 // set up our input controls
 var controls = require('../')({
   element: canvas,
-  distanceBounds: [2, 100],
-  distance: 6
+  distanceBounds: [1.5, 100],
+  distance: 2
 })
 
 preventScroll()
@@ -63,7 +76,16 @@ app.on('tick', function () {
 
   ctx.fillStyle = '#1B1B23'
   ctx.fillRect(0, 0, width, height)
-  drawMesh(ctx, camera, mesh)
+  
+  ctx.lineCap = 'round'
+  ctx.lineJoin = 'round'
+  ctx.lineWidth = clamp(1.5 / controls.distance, 0.25, 2)
+
+  meshes.forEach(function (mesh, i) {
+    ctx.strokeStyle = colors[i % colors.length]
+    // console.log(mesh)
+    drawMesh(ctx, camera, mesh)    
+  })
   ctx.restore()
 })
 
@@ -75,19 +97,8 @@ function drawMesh (ctx, camera, mesh) {
     return pos
   })
 
-  var mid = Math.floor(mesh.cells.length / 2)
-  ctx.lineCap = 'round'
-  ctx.lineJoin = 'round'
-  ctx.lineWidth = 1.5
-
   ctx.beginPath()
-  ctx.strokeStyle = colors[0]
-  drawTriangles(ctx, positions, mesh.cells, 0, mid)
-  ctx.stroke()
-
-  ctx.beginPath()
-  ctx.strokeStyle = colors[1]
-  drawTriangles(ctx, positions, mesh.cells, mid)
+  drawTriangles(ctx, positions, mesh.cells)
   ctx.stroke()
 }
 

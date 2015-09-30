@@ -26,6 +26,7 @@
     "draw-triangles-2d": "^1.0.0",
     "garnish": "^3.2.1",
     "icosphere": "^1.0.0",
+    "mesh-combine": "^1.1.0",
     "perspective-camera": "^2.0.1",
     "three": "^0.72.0",
     "uglify-js": "^2.4.24"
