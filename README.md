@@ -27,7 +27,8 @@ Well-suited alongside [perspective-camera](https://github.com/Jam3/perspective-c
 var controls = require('orbit-controls')()
 
 function tick () {
-  controls.update(camera.position, camera.direction, camera.up)
+  controls.update()
+  controls.applyTo(camera.position, camera.direction, camera.up)
 }
 ```
 
@@ -37,8 +38,10 @@ function tick () {
 
 #### `controls = createControls([opts])`
 
+- `position` the initial position of the camera, default `[0, 0, 1]`
+- `up` the initial direction of the camera, default `[0, 1, 0]`
 - `target` the center of the orbit, default `[0, 0, 0]`
-- `phi` the initial rotation in radians, phi in spherical coordinates, default `0`
+- `phi` the initial rotation in radians, phi in spherical coordinates, default `Math.PI/2`
 - `theta` the initial rotation in radians, theta in spherical coordinates, default `0`
 - `distance` the distance from the target, default `1`
 - `damping` how fast the controls slow down, between `0` and `1`, default `0.25`
@@ -56,11 +59,19 @@ function tick () {
 
 ## methods
 
-#### `controls.update(position, direction, up)`
+#### `controls.update()`
 
-Use the controls to update a camera's position vector, direction vector, and up vector.
+Update the internal position, direction, and up vectors that represent the camera.
+
+#### `controls.applyTo(position, direction, up)`
+
+Apply the control's current state to a target camera.
 
 ## properties
+
+#### `position`, `direction`, `up`
+
+Vec3s that represent the controls' camera. These are owned by the controls with the intention that they will be applied to a target camera using `controls.applyTo(position, direction, up)`
 
 #### `target`
 

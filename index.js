@@ -30,9 +30,14 @@ function createOrbitControls (opt) {
 
   var controls = {
     update: update,
+    applyTo : applyTo,
+
+    position: opt.position ? opt.position.slice() : [0, 0, 1],
+    direction: [0, 0, -1],
+    up: opt.up ? opt.up.slice() : [0, 1, 0],
 
     target: opt.target || [0, 0, 0],
-    phi: opt.phi || 0,
+    phi: opt.phi || Math.PI/2,
     theta: opt.theta || 0,
     distance: defined(opt.distance, 1),
     damping: defined(opt.damping, 0.25),
@@ -48,6 +53,8 @@ function createOrbitControls (opt) {
     thetaBounds: opt.thetaBounds || [-Infinity, Infinity],
     distanceBounds: opt.distanceBounds || [1, Infinity]
   }
+
+  guessInitialOptions()
 
   inputEvents({
     parent: opt.parent || window,
@@ -73,14 +80,14 @@ function createOrbitControls (opt) {
     inputDelta[2] -= delta * controls.pinchSpeed
   }
 
-  function update (position, direction, up) {
-    var cameraUp = up || Y_UP
+  function update () {
+    var cameraUp = controls.up || Y_UP
     quatFromVec3(upQuat, cameraUp, Y_UP)
     quatInvert(upQuatInverse, upQuat)
 
     var distance = controls.distance
 
-    glVec3.subtract(offset, position, controls.target)
+    glVec3.subtract(offset, controls.position, controls.target)
     glVec3.transformQuat(offset, offset, upQuat)
 
     var theta = Math.atan2(offset[0], offset[2])
@@ -106,13 +113,47 @@ function createOrbitControls (opt) {
     controls.distance = distance
 
     glVec3.transformQuat(offset, offset, upQuatInverse)
-    glVec3.add(position, controls.target, offset)
-    camLookAt(direction, cameraUp, position, controls.target)
+    glVec3.add(controls.position, controls.target, offset)
+    camLookAt(controls.direction, cameraUp, controls.position, controls.target)
 
     var damp = typeof controls.damping === 'number' ? controls.damping : 1
     for (var i = 0; i < inputDelta.length; i++) {
       inputDelta[i] *= 1 - damp
     }
+  }
+
+  function applyTo (position, direction, up) {
+    if (position) glVec3.copy(position, controls.position)
+    if (direction) glVec3.copy(direction, controls.direction)
+    if (up) glVec3.copy(up, controls.up)
+  }
+
+  function guessInitialOptions () {
+    // Set the distance to the position provided if none was set
+    if (typeof opt.distance !== "number" && opt.position) {
+      controls.distance = glVec3.subtract(controls.position, controls.target)
+      controls.distance = glVec3.length(controls.distance)
+      controls.distance = Math.max(controls.distance,EPSILON)
+    }
+
+    // Apply an initial phi and theta
+    if (typeof opt.phi === "number" || typeof opt.theta === "number") {
+      applyPhiTheta()
+    }
+
+    // Make sure target and position don't fall in the same space
+    var position = controls.position
+    var target = controls.target
+    if (position[0] === target[0] && position[1] === target[1] && position[2] === target[2]) {
+      applyPhiTheta()
+    }
+  }
+
+  function applyPhiTheta() {
+    controls.position[0] = controls.distance * Math.sin(controls.phi) * Math.sin(controls.theta)
+    controls.position[1] = controls.distance * Math.cos(controls.phi)
+    controls.position[2] = controls.distance * Math.sin(controls.phi) * Math.cos(controls.theta)
+    glVec3.add(controls.position, controls.position, controls.target)
   }
 }
 

@@ -28,6 +28,7 @@
     "icosphere": "^1.0.0",
     "mesh-combine": "^1.1.0",
     "perspective-camera": "^2.0.1",
+    "primitive-torus": "^1.0.4",
     "three": "^0.72.0",
     "uglify-js": "^2.4.24"
   },

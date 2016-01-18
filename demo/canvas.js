@@ -46,6 +46,7 @@ var camera = require('perspective-camera')({
 
 // set up our input controls
 var controls = require('../')({
+  position: camera.position,
   element: canvas,
   distanceBounds: [1, 100],
   distance: 2
@@ -63,13 +64,14 @@ app.on('tick', function () {
   var height = app.shape[1]
 
   // update controls and easings
-  controls.update(camera.position, camera.direction, camera.up)
+  controls.update()
+  controls.applyTo(camera.position, camera.direction, camera.up)
 
   // update camera viewport and matrices
   var viewport = [0, 0, width, height]
   camera.viewport = viewport
   camera.update()
-  
+
   // draw our mesh
   ctx.save()
   ctx.scale(app.scale, app.scale)
