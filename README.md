@@ -10,14 +10,17 @@ Features:
 - values are smoothed with damping
 - intuitive orbiting; roll is locked
 - modular and un-opinionated; can be used in any render engine
+- zooming with two-touch pinch
 
 Roadmap:
 
-- zoom on two-touch pinch
+- panning with two fingers / right mouse button
 
 Can be used with any camera abstraction that uses `position` and `direction` to form the view matrix, including ThreeJS, Babylon, stackgl, etc. 
 
 Well-suited alongside [perspective-camera](https://github.com/Jam3/perspective-camera).
+
+> *Note:* This module is still in development.
 
 ## Example
 
