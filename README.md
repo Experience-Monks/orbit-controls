@@ -2,8 +2,6 @@
 
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
-#### experimental / in development
-
 Generic controls for orbiting a target in 3D. Can be used to control a camera, a 3D ray, or anything with `{ position, direction }`.
 
 Features:
@@ -31,6 +29,11 @@ function tick () {
   controls.copyInto(camera.position, camera.direction, camera.up)
 }
 ```
+
+## Demos
+
+- [Canvas](http://jam3.github.io/orbit-controls/demo/canvas.html)
+- [WebGL (StreetView)](http://jam3.github.io/orbit-controls/demo/canvas.html)
 
 ## Usage
 

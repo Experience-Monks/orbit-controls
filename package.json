@@ -33,6 +33,7 @@
   },
   "scripts": {
     "test": "node test.js",
+    "build": "npm run build-canvas && npm run build-three",
     "start": "budo demo/canvas.js:canvas-bundle.js --dir demo --live",
     "three": "budo demo/three.js:three-bundle.js --dir demo --live",
     "build-canvas": "browserify demo/canvas.js | uglifyjs -cm > demo/canvas-bundle.js",
