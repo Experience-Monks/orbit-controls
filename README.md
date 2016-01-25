@@ -33,7 +33,7 @@ function tick () {
 ## Demos
 
 - [Canvas](http://jam3.github.io/orbit-controls/demo/canvas.html)
-- [WebGL (StreetView)](http://jam3.github.io/orbit-controls/demo/canvas.html)
+- [WebGL (StreetView)](http://jam3.github.io/orbit-controls/demo/three.html)
 
 ## Usage
 
