@@ -17,6 +17,9 @@ var colors = [
 
 // get a Canvas2D context
 var canvas = document.querySelector('.canvas')
+if (!canvas) {
+  canvas = document.body.appendChild(document.createElement('canvas'))
+}
 var ctx = canvas.getContext('2d', { alpha: false })
 
 // disable right-click

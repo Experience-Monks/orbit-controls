@@ -13,6 +13,9 @@ var controls = require('../')({
 })
 
 var canvas = document.querySelector('.canvas')
+if (!canvas) {
+  canvas = document.body.appendChild(document.createElement('canvas'))
+}
 var renderer = new THREE.WebGLRenderer({ canvas: canvas })
 
 var target = new THREE.Vector3()
@@ -24,7 +27,7 @@ var geo = new THREE.SphereGeometry(1, 32, 32)
 var mat = new THREE.MeshBasicMaterial({
   color: 0xffffff,
   side: THREE.DoubleSide,
-  map: THREE.ImageUtils.loadTexture('demo/street.jpg')
+  map: THREE.ImageUtils.loadTexture('street.jpg')
 })
 var box = new THREE.Mesh(geo, mat)
 scene.add(box)
