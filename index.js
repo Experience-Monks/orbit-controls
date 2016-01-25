@@ -17,6 +17,7 @@ var glVec3 = {
 
 var Y_UP = [0, 1, 0]
 var EPSILON = 1e-10
+var tmpVec3 = [0, 0, 0]
 
 module.exports = createOrbitControls
 function createOrbitControls (opt) {
@@ -30,14 +31,14 @@ function createOrbitControls (opt) {
 
   var controls = {
     update: update,
-    applyTo : applyTo,
+    copyInto: copyInto,
 
     position: opt.position ? opt.position.slice() : [0, 0, 1],
     direction: [0, 0, -1],
     up: opt.up ? opt.up.slice() : [0, 1, 0],
 
-    target: opt.target || [0, 0, 0],
-    phi: opt.phi || Math.PI/2,
+    target: opt.target ? opt.target.slice() : [0, 0, 0],
+    phi: opt.phi || Math.PI / 2,
     theta: opt.theta || 0,
     distance: defined(opt.distance, 1),
     damping: defined(opt.damping, 0.25),
@@ -51,10 +52,17 @@ function createOrbitControls (opt) {
 
     phiBounds: opt.phiBounds || [0, Math.PI],
     thetaBounds: opt.thetaBounds || [-Infinity, Infinity],
-    distanceBounds: opt.distanceBounds || [1, Infinity]
+    distanceBounds: opt.distanceBounds || [0, Infinity]
   }
 
-  guessInitialOptions()
+  // Compute distance if not defined in user options
+  if (typeof opt.distance !== 'number') {
+    glVec3.subtract(tmpVec3, controls.position, controls.target)
+    controls.distance = glVec3.length(tmpVec3)
+  }
+
+  // Apply an initial phi and theta
+  applyPhiTheta()
 
   inputEvents({
     parent: opt.parent || window,
@@ -122,37 +130,17 @@ function createOrbitControls (opt) {
     }
   }
 
-  function applyTo (position, direction, up) {
+  function copyInto (position, direction, up) {
     if (position) glVec3.copy(position, controls.position)
     if (direction) glVec3.copy(direction, controls.direction)
     if (up) glVec3.copy(up, controls.up)
   }
 
-  function guessInitialOptions () {
-    // Set the distance to the position provided if none was set
-    if (typeof opt.distance !== "number" && opt.position) {
-      controls.distance = glVec3.subtract(controls.position, controls.target)
-      controls.distance = glVec3.length(controls.distance)
-      controls.distance = Math.max(controls.distance,EPSILON)
-    }
-
-    // Apply an initial phi and theta
-    if (typeof opt.phi === "number" || typeof opt.theta === "number") {
-      applyPhiTheta()
-    }
-
-    // Make sure target and position don't fall in the same space
-    var position = controls.position
-    var target = controls.target
-    if (position[0] === target[0] && position[1] === target[1] && position[2] === target[2]) {
-      applyPhiTheta()
-    }
-  }
-
-  function applyPhiTheta() {
-    controls.position[0] = controls.distance * Math.sin(controls.phi) * Math.sin(controls.theta)
-    controls.position[1] = controls.distance * Math.cos(controls.phi)
-    controls.position[2] = controls.distance * Math.sin(controls.phi) * Math.cos(controls.theta)
+  function applyPhiTheta () {
+    var dist = Math.max(EPSILON, controls.distance)
+    controls.position[0] = dist * Math.sin(controls.phi) * Math.sin(controls.theta)
+    controls.position[1] = dist * Math.cos(controls.phi)
+    controls.position[2] = dist * Math.sin(controls.phi) * Math.cos(controls.theta)
     glVec3.add(controls.position, controls.position, controls.target)
   }
 }

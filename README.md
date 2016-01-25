@@ -28,7 +28,7 @@ var controls = require('orbit-controls')()
 
 function tick () {
   controls.update()
-  controls.applyTo(camera.position, camera.direction, camera.up)
+  controls.copyInto(camera.position, camera.direction, camera.up)
 }
 ```
 
@@ -53,7 +53,7 @@ function tick () {
 - `rotate` enable rotating, default `true`
 - `phiBounds` the bounds of the phi rotation, default `[0, Math.PI]`
 - `thetaBounds` the bounds of the theta rotation, default `[-Infinity, Infinity]`
-- `distanceBounds` the bounds of the distance, default `[1, Infinity]`
+- `distanceBounds` the bounds of the distance, default `[0, Infinity]`
 - `parent` the parent element, default `window`
 - `element` the element, default `window`
 
@@ -63,15 +63,22 @@ function tick () {
 
 Update the internal position, direction, and up vectors that represent the camera.
 
-#### `controls.applyTo(position, direction, up)`
+#### `controls.copyInto(position, direction, up)`
 
 Apply the control's current state to a target camera.
+
+This is purely for convenience; you can also copy the `controls.position` and other members manually.
 
 ## properties
 
 #### `position`, `direction`, `up`
 
-Vec3s that represent the controls' camera. These are owned by the controls with the intention that they will be applied to a target camera using `controls.applyTo(position, direction, up)`
+Vector arrays `[x, y, z]` that represent the camera controls. These are typically copied into your camera interface with:
+
+```js
+var camera = new MyPerspectiveCamera()
+controls.copyInto(camera.position, camera.direciton, camera.up)
+````
 
 #### `target`
 
