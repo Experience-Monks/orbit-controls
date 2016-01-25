@@ -1,6 +1,6 @@
 {
   "name": "orbit-controls",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "generic controls for orbiting a target in 3D",
   "main": "index.js",
   "license": "MIT",
@@ -20,22 +20,24 @@
     "touch-pinch": "^1.0.0"
   },
   "devDependencies": {
-    "browserify": "^11.2.0",
-    "budo": "^5.1.0",
+    "browserify": "^13.0.0",
+    "budo": "^8.0.0",
     "canvas-loop": "^1.0.5",
     "draw-triangles-2d": "^1.0.0",
-    "garnish": "^3.2.1",
     "icosphere": "^1.0.0",
     "mesh-combine": "^1.1.0",
     "perspective-camera": "^2.0.1",
+    "primitive-torus": "^1.0.4",
     "three": "^0.72.0",
     "uglify-js": "^2.4.24"
   },
   "scripts": {
     "test": "node test.js",
-    "start": "budo demo/canvas.js:bundle.js --live | garnish",
-    "three": "budo demo/three.js:bundle.js --live | garnish",
-    "build": "browserify demo/canvas.js | uglifyjs -cm > bundle.js"
+    "build": "npm run build-canvas && npm run build-three",
+    "start": "budo demo/canvas.js:canvas-bundle.js --dir demo --live",
+    "three": "budo demo/three.js:three-bundle.js --dir demo --live",
+    "build-canvas": "browserify demo/canvas.js | uglifyjs -cm > demo/canvas-bundle.js",
+    "build-three": "browserify demo/three.js | uglifyjs -cm > demo/three-bundle.js"
   },
   "keywords": [
     "orbit",

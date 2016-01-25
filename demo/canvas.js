@@ -12,11 +12,14 @@ var clamp = require('clamp')
 var colors = [
   'hsl(80, 50%, 50%)',
   'hsl(380, 50%, 50%)',
-  'hsl(180, 50%, 50%)',
+  'hsl(180, 50%, 50%)'
 ]
 
 // get a Canvas2D context
 var canvas = document.querySelector('.canvas')
+if (!canvas) {
+  canvas = document.body.appendChild(document.createElement('canvas'))
+}
 var ctx = canvas.getContext('2d', { alpha: false })
 
 // disable right-click
@@ -41,14 +44,15 @@ var camera = require('perspective-camera')({
   fov: 50 * Math.PI / 180,
   position: [0, 0, 1],
   near: 0.00001,
-  far: 100,
+  far: 100
 })
 
 // set up our input controls
 var controls = require('../')({
+  position: camera.position,
   element: canvas,
-  distanceBounds: [1.5, 100],
-  distance: 2
+  distanceBounds: [1, 100],
+  distance: 1.5
 })
 
 preventScroll()
@@ -63,28 +67,28 @@ app.on('tick', function () {
   var height = app.shape[1]
 
   // update controls and easings
-  controls.update(camera.position, camera.direction, camera.up)
+  controls.update()
+  controls.copyInto(camera.position, camera.direction, camera.up)
 
   // update camera viewport and matrices
   var viewport = [0, 0, width, height]
   camera.viewport = viewport
   camera.update()
-  
+
   // draw our mesh
   ctx.save()
   ctx.scale(app.scale, app.scale)
 
   ctx.fillStyle = '#1B1B23'
   ctx.fillRect(0, 0, width, height)
-  
+
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
   ctx.lineWidth = clamp(1.5 / controls.distance, 0.25, 2)
 
   meshes.forEach(function (mesh, i) {
     ctx.strokeStyle = colors[i % colors.length]
-    // console.log(mesh)
-    drawMesh(ctx, camera, mesh)    
+    drawMesh(ctx, camera, mesh)
   })
   ctx.restore()
 })
