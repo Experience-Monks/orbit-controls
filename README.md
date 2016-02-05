@@ -2,6 +2,10 @@
 
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
+<img src="http://i.imgur.com/d3vtXo1.png" width="75%" />  
+
+<sup>[(demo)](http://jam3.github.io/orbit-controls/demo/canvas.html) – [(source)](./demo/canvas.js)</sup>
+
 Generic controls for orbiting a target in 3D. Can be used to control a camera, a 3D ray, or anything with `{ position, direction }`.
 
 Features:
