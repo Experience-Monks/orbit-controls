@@ -38,7 +38,7 @@ function createOrbitControls (opt) {
     up: opt.up ? opt.up.slice() : [0, 1, 0],
 
     target: opt.target ? opt.target.slice() : [0, 0, 0],
-    phi: opt.phi || Math.PI / 2,
+    phi: defined(opt.phi, Math.PI / 2),
     theta: opt.theta || 0,
     distance: defined(opt.distance, 1),
     damping: defined(opt.damping, 0.25),
