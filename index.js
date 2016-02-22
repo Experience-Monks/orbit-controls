@@ -16,7 +16,7 @@ var glVec3 = {
 }
 
 var Y_UP = [0, 1, 0]
-var EPSILON = Number.EPSILON
+var EPSILON = Math.pow(2, -23)
 var tmpVec3 = [0, 0, 0]
 
 module.exports = createOrbitControls
