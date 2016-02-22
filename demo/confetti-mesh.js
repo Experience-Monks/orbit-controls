@@ -15,22 +15,22 @@ function getMesh (count, radius) {
 
   var cells = []
   var positions = []
-  
+
   var origin = [ 0, 0, 0 ]
   var triangleSize = 0.025
-  
+
   for (var i = 0, face = 0; i < count; i++) {
     var cell = [ face++, face++, face++ ]
     cells.push(cell)
     random(origin, radius)
 
-    for (var x=0; x<3; x++) {
+    for (var x = 0; x < 3; x++) {
       var edge = random([], triangleSize)
       add(edge, edge, origin)
       positions.push(edge)
     }
   }
-  
+
   return {
     cells: cells,
     positions: positions
