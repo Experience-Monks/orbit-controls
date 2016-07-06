@@ -79,6 +79,14 @@ Apply the control's current state to a target camera.
 
 This is purely for convenience; you can also copy the `controls.position` and other members manually.
 
+#### `controls.enable()`
+
+Enables the DOM events and input, attaching new mouse and touch events. If already enabled, this function does nothing.
+
+#### `controls.disable()`
+
+Disables the DOM events and input, detaching all events. If already disabled, this function does nothing.
+
 ## properties
 
 #### `position`, `direction`, `up`

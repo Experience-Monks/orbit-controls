@@ -15,7 +15,7 @@
     "gl-quat": "^1.0.0",
     "gl-vec3": "^1.0.3",
     "mouse-event-offset": "^3.0.2",
-    "mouse-wheel": "^1.0.2",
+    "mouse-wheel": "^1.2.0",
     "quat-from-unit-vec3": "^1.0.0",
     "touch-pinch": "^1.0.0"
   },

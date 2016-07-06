@@ -64,13 +64,16 @@ function createOrbitControls (opt) {
   // Apply an initial phi and theta
   applyPhiTheta()
 
-  inputEvents({
+  const input = inputEvents({
     parent: opt.parent || window,
     element: opt.element,
     rotate: opt.rotate !== false ? inputRotate : null,
     zoom: opt.zoom !== false ? inputZoom : null,
     pinch: opt.pinch !== false ? inputPinch : null
   })
+
+  controls.enable = input.enable
+  controls.disable = input.disable
 
   return controls
 
