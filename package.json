@@ -1,6 +1,6 @@
 {
   "name": "orbit-controls",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "generic controls for orbiting a target in 3D",
   "main": "index.js",
   "license": "MIT",
