@@ -95,7 +95,7 @@ Vector arrays `[x, y, z]` that represent the camera controls. These are typicall
 
 ```js
 var camera = new MyPerspectiveCamera()
-controls.copyInto(camera.position, camera.direciton, camera.up)
+controls.copyInto(camera.position, camera.direction, camera.up)
 ````
 
 #### `target`
