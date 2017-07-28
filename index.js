@@ -28,6 +28,8 @@ function createOrbitControls (opt) {
 
   var upQuat = [0, 0, 0, 1]
   var upQuatInverse = upQuat.slice()
+  var _phi = defined(opt.phi, Math.PI / 2)
+  var _theta = opt.theta || 0
 
   var controls = {
     update: update,
@@ -38,8 +40,6 @@ function createOrbitControls (opt) {
     up: opt.up ? opt.up.slice() : [0, 1, 0],
 
     target: opt.target ? opt.target.slice() : [0, 0, 0],
-    phi: defined(opt.phi, Math.PI / 2),
-    theta: opt.theta || 0,
     distance: defined(opt.distance, 1),
     damping: defined(opt.damping, 0.25),
     rotateSpeed: defined(opt.rotateSpeed, 0.28),
@@ -61,9 +61,6 @@ function createOrbitControls (opt) {
     controls.distance = glVec3.length(tmpVec3)
   }
 
-  // Apply an initial phi and theta
-  applyPhiTheta()
-
   var input = inputEvents({
     parent: opt.parent || window,
     element: opt.element,
@@ -74,6 +71,32 @@ function createOrbitControls (opt) {
 
   controls.enable = input.enable
   controls.disable = input.disable
+
+  Object.defineProperties(controls, {
+    phi: {
+      get: function () { return _phi },
+      set: function (v) {
+        _phi = v
+        applyPhiTheta()
+      }
+    },
+    theta: {
+      get: function () { return _theta },
+      set: function (v) {
+        _theta = v
+        applyPhiTheta()
+      }
+    },
+    dragging: {
+      get: function () { return input.isDragging() }
+    },
+    pinching: {
+      get: function () { return input.isPinching() }
+    }
+  })
+
+  // Apply an initial phi and theta
+  applyPhiTheta()
 
   return controls
 
@@ -91,7 +114,7 @@ function createOrbitControls (opt) {
     inputDelta[2] -= delta * controls.pinchSpeed
   }
 
-  function update () {
+  function updateDirection () {
     var cameraUp = controls.up || Y_UP
     quatFromVec3(upQuat, cameraUp, Y_UP)
     quatInvert(upQuatInverse, upQuat)
@@ -119,14 +142,17 @@ function createOrbitControls (opt) {
     offset[1] = radius * Math.cos(phi)
     offset[2] = radius * Math.sin(phi) * Math.cos(theta)
 
-    controls.phi = phi
-    controls.theta = theta
+    _phi = phi
+    _theta = theta
     controls.distance = distance
 
     glVec3.transformQuat(offset, offset, upQuatInverse)
     glVec3.add(controls.position, controls.target, offset)
     camLookAt(controls.direction, cameraUp, controls.position, controls.target)
+  }
 
+  function update () {
+    updateDirection()
     var damp = typeof controls.damping === 'number' ? controls.damping : 1
     for (var i = 0; i < inputDelta.length; i++) {
       inputDelta[i] *= 1 - damp
@@ -140,11 +166,19 @@ function createOrbitControls (opt) {
   }
 
   function applyPhiTheta () {
+    var phi = controls.phi
+    var theta = controls.theta
+    theta = clamp(theta, controls.thetaBounds[0], controls.thetaBounds[1])
+    phi = clamp(phi, controls.phiBounds[0], controls.phiBounds[1])
+    phi = clamp(phi, EPSILON, Math.PI - EPSILON)
+
     var dist = Math.max(EPSILON, controls.distance)
-    controls.position[0] = dist * Math.sin(controls.phi) * Math.sin(controls.theta)
-    controls.position[1] = dist * Math.cos(controls.phi)
-    controls.position[2] = dist * Math.sin(controls.phi) * Math.cos(controls.theta)
+    controls.position[0] = dist * Math.sin(phi) * Math.sin(theta)
+    controls.position[1] = dist * Math.cos(phi)
+    controls.position[2] = dist * Math.sin(phi) * Math.cos(theta)
     glVec3.add(controls.position, controls.position, controls.target)
+
+    updateDirection()
   }
 }
 

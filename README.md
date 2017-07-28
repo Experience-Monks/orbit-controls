@@ -104,7 +104,7 @@ The vec3 center of the orbit
 
 #### `phi`, `theta`
 
-The initial rotation in radians, in spherical coordinates
+The initial rotation in radians, in spherical coordinates. Changing either will re-calculate the direction.
 
 #### `distance`
 
@@ -125,6 +125,14 @@ Enable pinch, zoom, and rotate
 #### `phiBounds`, `thetaBounds`, `distanceBounds`
 
 The bounds of the controls
+
+#### `dragging` (read-only)
+
+Returns true if the user is currently dragging the controls.
+
+#### `pinching` (read-only)
+
+Returns true if the user is currently pinching (zooming on mobile) the controls.
 
 ## License
 
