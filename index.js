@@ -66,7 +66,9 @@ function createOrbitControls (opt) {
     element: opt.element,
     rotate: opt.rotate !== false ? inputRotate : null,
     zoom: opt.zoom !== false ? inputZoom : null,
-    pinch: opt.pinch !== false ? inputPinch : null
+    pinch: opt.pinch !== false ? inputPinch : null,
+    // TODO: rename this option
+    moveWithCamera: opt.moveWithCamera || false
   })
 
   controls.enable = input.enable
@@ -100,10 +102,33 @@ function createOrbitControls (opt) {
 
   return controls
 
-  function inputRotate (dx, dy) {
+  function inputRotateOld (dx, dy) {
     var PI2 = Math.PI * 2
     inputDelta[0] -= PI2 * dx * controls.rotateSpeed
     inputDelta[1] -= PI2 * dy * controls.rotateSpeed
+  }
+
+  function inputRotate (dx, dy, moveWithCamera) {
+    console.log(inputDelta)
+
+    return moveWithCamera
+      ? withCamera(dx, dy)
+      : againstCamera(dx, dy)
+  }
+
+  function againstCamera (dx, dy) {
+    inputDelta[0] -= calculateRotateDelta(dx)
+    inputDelta[1] -= calculateRotateDelta(dy)
+  }
+
+  function withCamera (dx, dy) {
+    inputDelta[0] += calculateRotateDelta(dx)
+    inputDelta[1] += calculateRotateDelta(dy)
+  }
+
+  function calculateRotateDelta (d) {
+    var PI2 = Math.PI * 2
+    return PI2 * d * controls.rotateSpeed
   }
 
   function inputZoom (delta) {

@@ -52,7 +52,8 @@ var controls = require('../')({
   position: camera.position,
   element: canvas,
   distanceBounds: [1, 100],
-  distance: 1.5
+  distance: 1.5,
+  moveWithCamera: false
 })
 
 preventScroll()
