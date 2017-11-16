@@ -66,7 +66,8 @@ function createOrbitControls (opt) {
     element: opt.element,
     rotate: opt.rotate !== false ? inputRotate : null,
     zoom: opt.zoom !== false ? inputZoom : null,
-    pinch: opt.pinch !== false ? inputPinch : null
+    pinch: opt.pinch !== false ? inputPinch : null,
+    invertInputRotate: opt.invertInputRotate || false
   })
 
   controls.enable = input.enable
@@ -100,10 +101,23 @@ function createOrbitControls (opt) {
 
   return controls
 
-  function inputRotate (dx, dy) {
+  function inputRotate (dx, dy, invertInputRotate) {
+    if (invertInputRotate) {
+      return invertedRotate(dx, dy)
+    }
+
+    inputDelta[0] -= rotateDelta(dx)
+    inputDelta[1] -= rotateDelta(dy)
+  }
+
+  function invertedRotate (dx, dy) {
+    inputDelta[0] += rotateDelta(dx)
+    inputDelta[1] += rotateDelta(dy)
+  }
+
+  function rotateDelta (d) {
     var PI2 = Math.PI * 2
-    inputDelta[0] -= PI2 * dx * controls.rotateSpeed
-    inputDelta[1] -= PI2 * dy * controls.rotateSpeed
+    return PI2 * d * controls.rotateSpeed
   }
 
   function inputZoom (delta) {
