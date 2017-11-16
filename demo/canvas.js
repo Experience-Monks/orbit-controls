@@ -53,7 +53,8 @@ var controls = require('../')({
   element: canvas,
   distanceBounds: [1, 100],
   distance: 1.5,
-  moveWithCamera: false
+  // invert the rotation of the camera in relation drag distance
+  // invertInputRotate: true
 })
 
 preventScroll()
