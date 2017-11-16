@@ -53,7 +53,7 @@ var controls = require('../')({
   element: canvas,
   distanceBounds: [1, 100],
   distance: 1.5,
-  // invert the rotation of the camera in relation drag distance
+  // invert the rotation of the camera in relation to drag distance
   // invertInputRotate: true
 })
 

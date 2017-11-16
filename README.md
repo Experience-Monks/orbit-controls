@@ -66,6 +66,7 @@ function tick () {
 - `distanceBounds` the bounds of the distance, default `[0, Infinity]`
 - `parent` the parent element, default `window`
 - `element` the element, default `window`
+- `invertInputRotate` invert the rotation of the camera in relation to drag distance, default `false`
 
 ## methods
 
