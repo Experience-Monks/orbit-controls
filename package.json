@@ -24,13 +24,19 @@
     "budo": "^8.0.0",
     "canvas-loop": "^1.0.5",
     "draw-triangles-2d": "^1.0.0",
+    "es2020": "^1.1.9",
     "icosphere": "^1.0.0",
     "mesh-combine": "^1.1.0",
     "perspective-camera": "^2.0.1",
     "primitive-torus": "^1.0.4",
+    "rollup": "^2.6.1",
+    "rollup-plugin-browserify-transform": "^1.0.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "standard": "^6.0.7",
     "three": "^0.72.0",
-    "uglify-js": "^2.4.24"
+    "uglify-js": "^2.8.29"
   },
   "scripts": {
     "test": "standard",
@@ -38,7 +44,8 @@
     "start": "budo demo/canvas.js:canvas-bundle.js --dir demo --live",
     "three": "budo demo/three.js:three-bundle.js --dir demo --live",
     "build-canvas": "browserify demo/canvas.js | uglifyjs -cm > demo/canvas-bundle.js",
-    "build-three": "browserify demo/three.js | uglifyjs -cm > demo/three-bundle.js"
+    "build-three": "browserify demo/three.js | uglifyjs -cm > demo/three-bundle.js",
+    "bundle": "mkdir -p dist && rollup -c && uglifyjs dist/orbit-controls.js -cm -o dist/orbit-controls.min.js"
   },
   "keywords": [
     "orbit",
